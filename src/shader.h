@@ -50,7 +50,6 @@ class Shader {
 
  private:
   GLuint program_{0}, vertex_shader_{0}, fragment_shader_{0};
-  int attribute_count_ = 0;
 
   // Specializations for GLfloat
   void SetUniformImpl(GLint location, GLfloat v0);
@@ -69,7 +68,7 @@ class Shader {
   void SetUniformImpl(GLint location, GLint v0, GLint v1, GLint v2, GLint v3);
 
   template <typename... T>
-  void SetUniformImpl(GLint location, T&&... value) {
+  void SetUniformImpl([[maybe_unused]]GLint location, [[maybe_unused]]T&&... value) {
     static_assert(true,
                   "Shader::SetUniform: uniform has unsupported type (only "
                   "GLfloat and GLint are supported)");

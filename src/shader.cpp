@@ -2,8 +2,6 @@
 
 #include <iostream>
 
-#include "utility.h"
-
 namespace {
 std::optional<GLuint> CompileShader(GLenum shader_type, CStringView source) {
   GLuint shader = glCreateShader(shader_type);
@@ -25,7 +23,7 @@ std::optional<GLuint> CompileShader(GLenum shader_type, CStringView source) {
 }
 }  // namespace
 
-Shader::Shader(const Key<Shader>& key,
+Shader::Shader([[maybe_unused]]const Key<Shader>& key,
                GLuint compiled_vertex_shader,
                GLuint compiled_fragment_shader)
     : vertex_shader_(compiled_vertex_shader),

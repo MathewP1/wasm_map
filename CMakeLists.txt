@@ -6,8 +6,10 @@ project(wasm_map)
 set(CMAKE_CXX_STANDARD 17)
 
 add_executable(wasm_map src/main.cpp
-               src/shader.h src/shader.cpp
-               src/utility.h src/utility.cpp)
+               src/shader.h src/shader.cpp)
+
+# Set fail on warning
+target_compile_options(wasm_map PRIVATE -Wall -Wextra -pedantic -Werror)
 
 # Set up Emscripten options for WebAssembly build
 if(EMSCRIPTEN)
