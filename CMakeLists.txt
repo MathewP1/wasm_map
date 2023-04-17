@@ -18,6 +18,7 @@ if(EMSCRIPTEN)
         LINK_FLAGS "--bind -s WASM=1 -s NO_EXIT_RUNTIME=1 \
         -s EXPORTED_FUNCTIONS=['_malloc','_free','_main'] \
         -s EXPORTED_RUNTIME_METHODS=['ccall','cwrap','getValue','setValue'] \
-        -s USE_WEBGL2=1 -s FULL_ES2=1"
+        -s USE_WEBGL2=1 -s FULL_ES2=1 \
+        --preload-file ${CMAKE_SOURCE_DIR}/files@/files"
     )
 endif()

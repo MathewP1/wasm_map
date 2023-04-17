@@ -6,3 +6,4 @@ map_data/*
 !map_data/REQUIREMENTS.txt
 !map_data/*.py
 .DS_Store
+files/

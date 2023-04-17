@@ -47,8 +47,13 @@ int main() {
     return 1;
   }
 
-  if (!DrawTriangle(canvas_width, canvas_height)) {
-    std::cerr << "Failed to draw!" << std::endl;
+  // if (!DrawTriangle(canvas_width, canvas_height)) {
+  //   std::cerr << "Failed to draw!" << std::endl;
+  //   return 1;
+  // }
+
+  if (!DrawMap(canvas_width, canvas_height)) {
+    std::cerr << "Failed to draw map!" << std::endl;
     return 1;
   }
 

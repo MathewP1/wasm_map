@@ -1,1 +1,2 @@
 - Add option to build with docker instead of a local emscripten installation
+- Add parsing arguments to python script to name the files it produces and improve build script to use that

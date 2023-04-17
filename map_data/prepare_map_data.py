@@ -38,6 +38,7 @@ def save_polygons_to_file(polygons, output_path="land_polygons.txt"):
         for polygon in polygons:
             for point in polygon.exterior.coords:
                 output_file.write(f"{point[0]} {point[1]} ")
+            output_file.write("\n")
 
 
 if __name__ == "__main__":
