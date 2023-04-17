@@ -7,4 +7,5 @@
 - `./emsdk install latest`
 - `./emsdk activate latest`
 - `source ./emsdk_env.sh` or optionally add this line to `~/.bash_profie` 
+3. `git submodule update --init --recursive` to download third_party code.
 4. Run build script: `./build_wasm.sh`

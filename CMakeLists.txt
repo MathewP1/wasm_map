@@ -6,7 +6,10 @@ project(wasm_map)
 set(CMAKE_CXX_STANDARD 17)
 
 add_executable(wasm_map src/main.cpp
-               src/shader.h src/shader.cpp)
+               src/shader.h src/shader.cpp
+               src/map_data.h src/map_data.cpp)
+
+include_directories(src/third_party/glm)               
 
 # Set fail on warning
 target_compile_options(wasm_map PRIVATE -Wall -Wextra -pedantic -Werror)

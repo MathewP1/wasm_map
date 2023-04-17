@@ -91,52 +91,6 @@ inline bool DrawTriangle(int canvas_width, int canvas_height) {
   return true;
 }
 
-inline std::vector<std::vector<float>> ReadMapData(
-    const std::string& filename) {
-  std::ifstream file(filename);
-  if (!file.is_open()) {
-    std::cerr << "Failed to open file: " << filename << std::endl;
-    return {};
-  }
-
-  std::vector<std::vector<float>> polygons;
-  std::string line;
-  while (std::getline(file, line)) {
-    std::vector<float> polygon;
-    std::istringstream iss(line);
-    float x;
-    while (iss >> x) {
-      polygon.push_back(x);
-    }
-    polygons.push_back(polygon);
-  }
-  return polygons;
-}
-
-// returns a vector of GLfloats with normalized coordinates and a center point
-inline std::vector<GLfloat> GetNormalizedTriangleFanPolygon(
-    const std::vector<float>& polygon,
-    int canvas_width,
-    int canvas_height) {
-  std::vector<GLfloat> vertices;
-  float sum_x = 0.0f;
-  float sum_y = 0.0f;
-  for (size_t i = 0; i < polygon.size(); i += 2) {
-    // normalize to [0, canvas_width] and [0, canvas_height]
-    float x = (polygon[i] + 90) / 180.0f * (float)canvas_width;
-    float y = (polygon[i + 1] + 180) / 360.0f * (float)canvas_height;
-    sum_x += x;
-    sum_y += y;
-    vertices.push_back(x);
-    vertices.push_back(y);
-  }
-  // add center point
-  vertices.insert(vertices.begin(), sum_y / (polygon.size() / 2));
-  vertices.insert(vertices.begin(), sum_x / (polygon.size() / 2));
-
-  return vertices;
-}
-
 inline bool DrawMap([[maybe_unused]] int canvas_width,
                     [[maybe_unused]] int canvas_height) {
   // open file with map data
