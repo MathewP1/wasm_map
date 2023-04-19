@@ -65,6 +65,10 @@ void Shader::Use() const {
   glUseProgram(program_);
 }
 
+void Shader::Unuse() const {
+  glUseProgram(0);
+}
+
 std::optional<Shader> Shader::CreateFromStrings(CStringView vertex_source,
                                                 CStringView fragment_source) {
   // if (!IsNullTerminated(vertex_source) || !IsNullTerminated(fragment_source))

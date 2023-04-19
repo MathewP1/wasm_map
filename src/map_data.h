@@ -16,8 +16,9 @@ class MapData {
   MapData(MapDataVector&& map_data) : map_data_(std::move(map_data)) {}
   static std::optional<MapData> CreateFromFile(const std::string& filename);
 
-  std::vector<glm::vec2> GetTriangleFanPolygon(int index, int norm_width, int norm_height) const;
-
+  std::vector<glm::vec2> GetVertices(std::size_t index) const;
+  std::vector<glm::vec2> GetTriangleFanPolygon(std::size_t index) const;
+  std::size_t GetPolygonCount() const { return map_data_.size(); }
 
  private:
   MapDataVector map_data_;

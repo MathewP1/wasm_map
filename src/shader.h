@@ -45,6 +45,7 @@ class Shader {
 
   GLint GetAttributeLocation(CStringView c_sv);
   void Use() const;
+  void Unuse() const;
   static std::optional<Shader> CreateFromStrings(CStringView vertex_source,
                                                  CStringView fragment_source);
 

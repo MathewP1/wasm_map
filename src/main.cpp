@@ -7,11 +7,12 @@
 #include <emscripten.h>
 #include <emscripten/html5.h>
 
-#include "examples.h"
+#include "app_state.h"
 
-namespace {
-  int canvas_width = 0;
-  int canvas_height = 0;
+void render_frame(void* data) {
+  AppState* app = static_cast<AppState*>(data);
+  app->Update();
+  app->Render();
 }
 
 EMSCRIPTEN_KEEPALIVE bool initWebGL(EmscriptenWebGLContextAttributes attrs) {
@@ -21,17 +22,29 @@ EMSCRIPTEN_KEEPALIVE bool initWebGL(EmscriptenWebGLContextAttributes attrs) {
     std::cerr << "Failed to create WebGL context." << std::endl;
     return false;
   }
-
   emscripten_webgl_make_context_current(ctx);
-  emscripten_get_canvas_element_size("#webglCanvas", &canvas_width,
-                                     &canvas_height);
-  glViewport(0, 0, canvas_width, canvas_height);
-  glClearColor(0.0f, 0.0f, 0.0f, 0.0f);  // Set background color
-  glClear(GL_COLOR_BUFFER_BIT);  // Clear the canvas with the background color
-
-  
-  // emscripten_set_main_loop(render_frame, 0, 1);
   return true;
+}
+
+EM_BOOL KeyCallback(int event_type, const EmscriptenKeyboardEvent* e,
+                    void* app_state) {
+  AppState* app = static_cast<AppState*>(app_state);
+  app->KeyEvent(event_type, e);
+  return 0;
+}
+
+EM_BOOL MouseCallback(int event_type, const EmscriptenMouseEvent* e,
+                       void* app_state) {
+  AppState* app = static_cast<AppState*>(app_state);
+  app->MouseEvent(event_type, e);
+  return 0;
+}
+
+EM_BOOL UICallback(int event_type, const EmscriptenUiEvent* e,
+                    void* app_state) {
+  AppState* app = static_cast<AppState*>(app_state);
+  app->UIEvent(event_type, e);
+  return 0;
 }
 
 int main() {
@@ -47,16 +60,27 @@ int main() {
     return 1;
   }
 
-  // if (!DrawTriangle(canvas_width, canvas_height)) {
-  //   std::cerr << "Failed to draw!" << std::endl;
-  //   return 1;
-  // }
+  int canvas_width, canvas_height;
+  emscripten_get_canvas_element_size("#webglCanvas", &canvas_width,
+                                     &canvas_height);
+  glDisable(GL_DEPTH_TEST);
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);  
+  glViewport(0, 0, canvas_width, canvas_height);
+  glClearColor(0.0f, 0.0f, 0.0f, 1.0f);  // Set background color
+  glClear(GL_COLOR_BUFFER_BIT);  // Clear the canvas with the background color
 
-  if (!DrawMap(canvas_width, canvas_height)) {
-    std::cerr << "Failed to draw map!" << std::endl;
-    return 1;
-  }
+  AppState app_state(canvas_width, canvas_height);
 
-  emscripten_exit_with_live_runtime();
+  emscripten_set_keydown_callback(EMSCRIPTEN_EVENT_TARGET_DOCUMENT, &app_state, 1, KeyCallback);
+  emscripten_set_keyup_callback(EMSCRIPTEN_EVENT_TARGET_DOCUMENT, &app_state, 1, KeyCallback);
+  emscripten_set_mousedown_callback(EMSCRIPTEN_EVENT_TARGET_DOCUMENT, &app_state, 1, MouseCallback);
+  emscripten_set_mouseup_callback(EMSCRIPTEN_EVENT_TARGET_DOCUMENT, &app_state, 1, MouseCallback);
+  emscripten_set_mousemove_callback(EMSCRIPTEN_EVENT_TARGET_DOCUMENT, &app_state, 1, MouseCallback);
+  emscripten_set_resize_callback(EMSCRIPTEN_EVENT_TARGET_DOCUMENT, &app_state, 1, UICallback);
+
+  emscripten_set_main_loop_arg(render_frame, &app_state, 0, 1);
+
+  // emscripten_exit_with_live_runtime();
   return 0;
 }

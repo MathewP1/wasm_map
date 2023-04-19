@@ -59,9 +59,9 @@ emcmake cmake ../.. -DCMAKE_BUILD_TYPE=Release || error_exit "emcmake cmake fail
 emmake make || error_exit "emmake make failed"
 
 # Copy the generated files to the web directory
-cp wasm_map.{js,wasm,data} "$ROOT_DIR/web" || error_exit "Failed to copy wasm_map.{js,wasm} files"
+cp wasm_map.{js,wasm,data,worker.js} "$ROOT_DIR/web" || error_exit "Failed to copy wasm_map.{js,wasm} files"
 
 # Run the server and reload the page (in the background)
-pkill -f "python3 -m http.server" # Kill any existing server instances
+pkill -f "python3 server.py" # Kill any existing server instances
 cd ../../web || error_exit "Failed to change directory to web"
-python3 -m http.server 8080 || error_exit "Failed to start HTTP server"
+python3  ../server.py || error_exit "Failed to start HTTP server"
